@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class CoatOfArmsActivity extends AppCompatActivity {
-    // Эта activity для показа герба в портретной ориентации
+    // Эта activity для показа герба в портретной ориентации (только герб видно )
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

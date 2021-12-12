@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
+//
 public class CoatOfArmsFragment extends Fragment {
 // Фабричный метод создания фрагмента
 // Фрагменты рекомендуется создавать через фабричные методы.

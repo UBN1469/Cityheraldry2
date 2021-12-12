@@ -1,7 +1,5 @@
 package com.mygeekbranch.cityheraldry2;
 
-
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,28 +31,44 @@ public class CitiesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initList(view);
-    }
-
-    // activity создана, можно к ней обращаться. Выполним начальные действия
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Определение, можно ли будет расположить рядом герб в другом фрагменте
-
-        isExistCoatOfArms = getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
+        // activity создана, можно к ней обращаться. Выполним начальные действия
+        // перенес сюда. т.к. onActivityCreated диприкейт
+        isExistCoatOfArms = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         // Если это не первое создание, то восстановим текущую позицию
         if (savedInstanceState != null){
             // Восстановление текущей позиции.
             currentPosition = savedInstanceState.getInt("CurrentCity", 0);
         }
         // Если можно нарисовать рядом герб, то сделаем это
-        if (isExistCoatOfArms){
+        if (isExistCoatOfArms) {
             showCoatOfArms();
+
         }
+
+
+
     }
+
+    // activity создана, можно к ней обращаться. Выполним начальные действия
+
+
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+        // Определение, можно ли будет расположить рядом герб в другом фрагменте
+//
+//        isExistCoatOfArms = getResources().getConfiguration().orientation ==
+//                Configuration.ORIENTATION_LANDSCAPE;
+//        // Если это не первое создание, то восстановим текущую позицию
+//        if (savedInstanceState != null){
+//            // Восстановление текущей позиции.
+//            currentPosition = savedInstanceState.getInt("CurrentCity", 0);
+//        }
+//        // Если можно нарисовать рядом герб, то сделаем это
+//        if (isExistCoatOfArms){
+//            showCoatOfArms();
+//        }
+// }
     // Сохраним текущую позицию (вызывается перед выходом из фрагмента)
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -105,11 +120,16 @@ public class CitiesFragment extends Fragment {
 
         } else {
             // Если нельзя вывести герб рядом, откроем вторую активити
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), CoatOfArmsActivity.class);
+            //Intent intent = new Intent();
+            //intent.setClass(getActivity(), CoatOfArmsActivity.class);
+
+            Intent intent = new Intent(getActivity(),CoatOfArmsActivity.class);
+
             // И передадим туда параметры
             intent.putExtra("index",currentPosition);
             startActivity(intent);
         }
     }
+
+
 }
