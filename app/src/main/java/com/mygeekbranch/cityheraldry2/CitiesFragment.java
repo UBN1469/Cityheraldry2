@@ -137,15 +137,24 @@ public class CitiesFragment extends Fragment {
             //Intent intent = new Intent();
             //intent.setClass(getActivity(), CoatOfArmsActivity.class);
 
-            Intent intent = new Intent(getActivity(),CoatOfArmsActivity.class);
+            //Intent intent = new Intent(getActivity(),CoatOfArmsActivity.class);
 
             // И передадим туда параметры
            // intent.putExtra("index",currentPosition);
             //+ и передадим туда Parcel
-            intent.putExtra(PARCEL,parcel);
+            //intent.putExtra(PARCEL,parcel);
+            //startActivity(intent);
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, CoatOfArmsFragment.create(parcel))
+                    .addToBackStack(null)
+                    .commit();
 
 
-            startActivity(intent);
+
+
+
         }
     }
 
