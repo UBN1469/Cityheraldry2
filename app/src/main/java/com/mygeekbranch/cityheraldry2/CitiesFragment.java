@@ -103,6 +103,7 @@ public class CitiesFragment extends Fragment {
     }
     // Показать герб. Ecли возможно, то показать рядом со списком,
     // если нет, то открыть вторую activity
+    
     private void showCoatOfArms(){
         if (isExistCoatOfArms){
             // Проверим, что фрагмент с гербом существует в активити
