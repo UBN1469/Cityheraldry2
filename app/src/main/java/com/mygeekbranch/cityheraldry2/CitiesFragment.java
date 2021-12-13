@@ -1,5 +1,7 @@
 package com.mygeekbranch.cityheraldry2;
 
+import static com.mygeekbranch.cityheraldry2.CoatOfArmsFragment.PARCEL;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -8,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 // Фрагмент выбора города из списка
 public class CitiesFragment extends Fragment {
-    int currentPosition = 0; // Текущая позиция (выбранный город)
+    //int currentPosition = 0; // Текущая позиция (выбранный город)
+    Parcel currentParcel; // Текущая позиция (номер города и название)
     boolean isExistCoatOfArms; // Можно ли расположить рядом фрагмент с гербом
 
     // При создании фрагмента укажем его макет
@@ -35,16 +37,21 @@ public class CitiesFragment extends Fragment {
         // перенес сюда. т.к. onActivityCreated диприкейт
         isExistCoatOfArms = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         // Если это не первое создание, то восстановим текущую позицию
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             // Восстановление текущей позиции.
-            currentPosition = savedInstanceState.getInt("CurrentCity", 0);
+            //currentPosition = savedInstanceState.getInt("CurrentCity", 0);
+            currentParcel = (Parcel) savedInstanceState.getSerializable("CurrentCity");
+
+        }else {
+            //+ Если восcтановить не удалось, то сделаем объект с первым индексом
+            currentParcel = new Parcel(0, getResources().getStringArray(R.array.cities)[0]);
+
         }
         // Если можно нарисовать рядом герб, то сделаем это
         if (isExistCoatOfArms) {
-            showCoatOfArms();
+            showCoatOfArms(currentParcel);
 
         }
-
 
 
     }
@@ -72,7 +79,9 @@ public class CitiesFragment extends Fragment {
     // Сохраним текущую позицию (вызывается перед выходом из фрагмента)
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("CurrentCity",currentPosition);
+        //outState.putInt("CurrentCity",currentPosition);
+        //+ Также меняем текущую позицию на Parcel
+        outState.putSerializable("CurrentCity",currentParcel);
         super.onSaveInstanceState(outState);
     }
 
@@ -94,8 +103,10 @@ public class CitiesFragment extends Fragment {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentPosition = fi;
-                    showCoatOfArms();
+                    //currentPosition = fi;
+                    //+ Теперь опираемся на Parcel, а не на текущую позицию
+                    currentParcel =new Parcel(fi, getResources().getStringArray(R.array.cities)[fi]);
+                    showCoatOfArms(currentParcel);
                 }
             });
         }
@@ -103,15 +114,17 @@ public class CitiesFragment extends Fragment {
     }
     // Показать герб. Ecли возможно, то показать рядом со списком,
     // если нет, то открыть вторую activity
-    
-    private void showCoatOfArms(){
+
+    private void showCoatOfArms(Parcel parcel){
         if (isExistCoatOfArms){
             // Проверим, что фрагмент с гербом существует в активити
             CoatOfArmsFragment detail = (CoatOfArmsFragment)getFragmentManager().findFragmentById(R.id.coat_of_arms);
             // Если есть необходимость, то выведем герб
-            if (detail == null || detail.getIndex() != currentPosition){
+            //if (detail == null || detail.getIndex() != currentPosition){
+            if (detail == null || detail.getParsel().getImageIndex() !=parcel.getImageIndex()){
+
                 // Создаем новый фрагмент с текущей позицией для вывода герба
-                detail = CoatOfArmsFragment. create ( currentPosition );
+                detail = CoatOfArmsFragment. create ( parcel );
                 // Выполняем транзакцию по замене фрагмента
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.coat_of_arms, detail); // Замена фрагмента
@@ -127,7 +140,11 @@ public class CitiesFragment extends Fragment {
             Intent intent = new Intent(getActivity(),CoatOfArmsActivity.class);
 
             // И передадим туда параметры
-            intent.putExtra("index",currentPosition);
+           // intent.putExtra("index",currentPosition);
+            //+ и передадим туда Parcel
+            intent.putExtra(PARCEL,parcel);
+
+
             startActivity(intent);
         }
     }
