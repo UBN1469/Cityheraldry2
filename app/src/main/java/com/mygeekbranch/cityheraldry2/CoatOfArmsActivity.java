@@ -17,7 +17,7 @@ public class CoatOfArmsActivity extends AppCompatActivity {
             return;
         }
         if (savedInstanceState ==null){
-            // Если эта activity запускается первый раз (с каждым новым гербомпервый раз)
+            // Если эта activity запускается первый раз (с каждым новым гербом первый раз)
 // то перенаправим параметр фрагменту
             CoatOfArmsFragment details = new CoatOfArmsFragment();
             details.setArguments(getIntent().getExtras());
